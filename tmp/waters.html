@@ -1,10 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <title>Водоёмы России</title>
 </head>
-<body>
 
+<body>
+<H2><font face="Montserrat">Водоёмы</font>></H2>
+    {% for water in waters %}
+        <font face="Montserrat">
+        <A href = "waters/ {{ water['id'] }}" >
+            {{ water['name'] }} ({{ water['type']}}), {{ water['size'] }}, {% if water['type'] == 0: % {water}}
+        </A><br>
+        </font>>
+    {% endfor %}
+
+    <P>
+    <A href = "/museums/add">
+        Add museum
+    </A><br>
+    <A href = "/museums/add_exhibit">
+        Add exhibit to museum
+    </A><br>
+    <A href = "/museums/remove">
+        Remove museum
+    </A>
+
+    <P>
+    <A href = "/">
+        Back to Main page
+    </A>
 </body>
+
 </html>

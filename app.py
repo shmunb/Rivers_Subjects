@@ -1,6 +1,8 @@
 from flask import Flask, request, render_template
 from sqlalchemy import text
 from db import DB
+from dbparser import *
+
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -19,6 +21,7 @@ subject_type = {
     "АО": 3
 }
 
+
 @app.route('/')
 def main_page():
     return render_template('main_page.html')
@@ -32,8 +35,8 @@ def waters():
 
 
 @app.route('/waters/<water_id>')
-def waters(water_id):
-    water_data = DB.get_waters_info(water_id)
+def water(water_id):
+    water_data = DB.get_water_info(water_id)
     subjects_data = DB.get_subjects_for_water(water_id)
 
     return render_template('water.html', water=water_data, subjects=subjects_data)
@@ -59,7 +62,7 @@ def remove_water():
     return render_template('remove_water.html')
 
 
-@app.route('/waters/add_subject', methods=['GET', 'POST'])
+@app.route('/waters/add_subject_to_water', methods=['GET', 'POST'])
 def add_subject_to_water():
     if request.method == 'POST':
         water_name = request.form.get('water_name')
@@ -67,15 +70,6 @@ def add_subject_to_water():
         DB.add_subject_to_water(water_name, subject_name)
 
     return render_template('add_subject_to_water.html')
-
-
-@app.route('/waters/remove_subject', methods=['GET', 'POST'])
-def remove_subject_from_water():
-    if request.method == 'POST':
-        subject_name = request.form.get('subject_name')
-        DB.remove_subject_from_water(subject_name)
-
-    return render_template('remove_subject_from_water.html')
 
 
 @app.route('/subjects')
@@ -105,7 +99,7 @@ def remove_subject():
   return render_template('remove_subject.html')
 
 
-@app.route('/subjects/add_water', methods=['GET', 'POST'])
+@app.route('/subjects/add_water_to_subject', methods=['GET', 'POST'])
 def add_water_to_subject():
     if request.method == 'POST':
         water_name = request.form.get('water_name')
@@ -115,7 +109,7 @@ def add_water_to_subject():
     return render_template('add_subject_to_water.html')
 
 
-@app.route('/waters/remove_subject', methods=['GET', 'POST'])
+@app.route('/waters/remove_subject_from_water', methods=['GET', 'POST'])
 def remove_subject_from_water():
     if request.method == 'POST':
         subject_name = request.form.get('subject_name')
@@ -124,4 +118,16 @@ def remove_subject_from_water():
     return render_template('remove_subject_from_water.html')
 
 
-app.run(host='0.0.0.0', port=5005)
+#run_base(DB)
+#DB.drop_tables()
+#parse_waters(DB)
+#parse_subjects(DB)
+
+for row in DB.engine.execute('SELECT * FROM waters;'):
+    print(dict(row))
+for row in DB.engine.execute('SELECT * FROM subjects;'):
+    print(dict(row))
+
+#DB.engine.execute(('SELECT * FROM subjects;'))
+
+app.run(host='0.0.0.0', port=5021)

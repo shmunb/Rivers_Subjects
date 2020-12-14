@@ -5,8 +5,10 @@ class DB(object):
     def __init__(self):
         self.engine = create_engine('sqlite:///data.db', echo=True)
 
-
-
+    def drop_tables(self):
+        print(self.engine.table_names())
+        query_result = self.engine.execute('DELETE FROM waters')
+        query_result = self.engine.execute('DELETE FROM subjects')
 
     def get_waters(self):
         query = text('SELECT * FROM waters')
@@ -29,12 +31,17 @@ class DB(object):
         return output
 
     def get_water_info(self, water_id):
-        query = text('SELECT name, type, size FROM waters WHERE id =' + water_id)
+        query = text('SELECT name, type, size, inflows FROM waters WHERE id =' + water_id)
         query_result = self.engine.execute(query)
 
         output = []
         for row in query_result:
-            output.append(dict(row))
+            res = dict(row)
+            if res['type'] != 0:
+                res['inflows'] = ''
+            else:
+                res['inflows'] = 'Впадает в:' + self.engine.execute('SELECT name FROM waters WHERE id = ' + res['inflows'])
+            output.append(res)
 
         return output[0]
 
