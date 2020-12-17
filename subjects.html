@@ -1,15 +1,15 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Водоёмы России</title>
+    <title>Субъекты РФ</title>
 </head>
 
 <body>
-<H2><font face="Montserrat">Водоёмы</font></H2>
-    {% for water in waters %}
+<H2><font face="Montserrat">Субъекты</font></H2>
+    {% for subject in subjects %}
         <font face="Montserrat">
         <A href = "waters/ {{ water['id'] }}" >
-            {{ water['name'] }} ({{ water['type']}}), {{ water['size'] }}, {% if water['type'] == 0: % {waters[water['inflow']]}}
+            {{ subject['name'] }} ({{ subject['type']}}), {{ subject['size'] }}, {{subject['population']}}
         </A><br>
         </font>
     {% endfor %}

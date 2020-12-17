@@ -8,23 +8,10 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 DB = DB()
 
-water_type = {
-    "река": 0,
-    "море": 1,
-    "озеро": 2,
-    "водохранилище": 3}
-
-subject_type = {
-    "область": 0,
-    "край": 1,
-    "ГФЗ": 2,
-    "АО": 3
-}
-
 
 @app.route('/')
 def main_page():
-    return render_template('main_page.html')
+    return render_template('main.html')
 
 
 @app.route('/waters')
@@ -33,6 +20,12 @@ def waters():
 
     return render_template('waters.html', waters=waters)
 
+
+@app.route('/waters/sorted_by=<sorted_by>')
+def waters_sorted(sorted_by):
+    waters = DB.get_waters(order=sorted_by)
+
+    return render_template('waters.html', waters=waters)
 
 @app.route('/waters/<water_id>')
 def water(water_id):
@@ -74,9 +67,16 @@ def add_subject_to_water():
 
 @app.route('/subjects')
 def subjects():
-  subjects = DB.get_subjects()
+   subjects = DB.get_subjects()
 
-  return render_template('subjects.html', subjects=subjects)
+   return render_template('subjects.html', subjects=subjects)
+
+
+@app.route('/subjects/sorted_by=<sorted_by>')
+def subjects_sorted(sorted_by):
+   subjects = DB.get_subjects(order=sorted_by)
+
+   return render_template('subjects.html', subjects=subjects)
 
 
 @app.route('/subjects/add', methods=['GET', 'POST'])
@@ -130,4 +130,4 @@ for row in DB.engine.execute('SELECT * FROM subjects;'):
 
 #DB.engine.execute(('SELECT * FROM subjects;'))
 
-app.run(host='0.0.0.0', port=5021)
+app.run(host='127.0.0.1', port=5021)

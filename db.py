@@ -1,5 +1,31 @@
 from sqlalchemy import create_engine, text
 
+water_type = {
+    "река": 0,
+    "море": 1,
+    "озеро": 2,
+    "водохранилище": 3}
+
+water_type_inverted = {
+    0: "река",
+    1: "море",
+    2: "озеро",
+    3: "водохранилище"}
+
+subject_type = {
+    "область": 0,
+    "край": 1,
+    "ГФЗ": 2,
+    "АО": 3
+}
+
+subject_type_inverted = {
+    0: "область",
+    1: "край",
+    2: "ГФЗ",
+    3: "АО"
+}
+
 
 class DB(object):
     def __init__(self):
@@ -10,23 +36,31 @@ class DB(object):
         query_result = self.engine.execute('DELETE FROM waters')
         query_result = self.engine.execute('DELETE FROM subjects')
 
-    def get_waters(self):
-        query = text('SELECT * FROM waters')
+    def get_waters(self, order=None):
+
+        if order is None:
+            query = text('SELECT * FROM waters')
+        else:
+            query = text('SELECT * FROM waters ORDER BY ' + order)
         query_result = self.engine.execute(query)
 
         output = []
         for row in query_result:
             output.append(dict(row))
+            output[len(output) - 1]['type'] = water_type_inverted[output[len(output) - 1]['type']]
 
         return output
 
-    def get_subjects(self):
-        query = text('SELECT * FROM subjects')
+    def get_subjects(self, order=None):
+        if order is None:
+            query = text('SELECT * FROM subjects')
+        else:
+            query = text('SELECT * FROM subjects ORDER BY ' + order)
         query_result = self.engine.execute(query)
-
         output = []
         for row in query_result:
             output.append(dict(row))
+            output[len(output) - 1]['type'] = subject_type_inverted[output[len(output) - 1]['type']]
 
         return output
 
