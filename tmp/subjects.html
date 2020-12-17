@@ -9,25 +9,25 @@
     {% for subject in subjects %}
         <font face="Montserrat">
         <A href = "waters/ {{ water['id'] }}" >
-            {{ subject['name'] }} ({{ subject['type']}}), {{ subject['size'] }}, {{subject['population']}}
+            {{ subject['name'] }} ({{ subject['type']}}),    {{ subject['size'] }} м^2,    {{subject['population']}} чел.
         </A><br>
         </font>
     {% endfor %}
 
     <P>
-    <A href = "/museums/add">
-        Add museum
+    <A href = "/subjects/add">
+        Зарегистрировать субъект
     </A><br>
-    <A href = "/museums/add_exhibit">
-        Add exhibit to museum
+    <A href = "/subjects/add_water">
+        Добавить водоём в субъекте
     </A><br>
-    <A href = "/museums/remove">
-        Remove museum
+    <A href = "/subjects/remove">
+        Удалить субъект
     </A>
 
     <P>
     <A href = "/">
-        Back to Main page
+        Главная
     </A>
 </body>
 

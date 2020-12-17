@@ -38,12 +38,13 @@ class DB(object):
 
     def get_waters(self, order=None):
 
+        query = ''
+
         if order is None:
             query = text('SELECT * FROM waters')
         else:
             query = text('SELECT * FROM waters ORDER BY ' + order)
         query_result = self.engine.execute(query)
-
         output = []
         for row in query_result:
             output.append(dict(row))
@@ -52,6 +53,9 @@ class DB(object):
         return output
 
     def get_subjects(self, order=None):
+
+        query = ''
+
         if order is None:
             query = text('SELECT * FROM subjects')
         else:
@@ -65,16 +69,16 @@ class DB(object):
         return output
 
     def get_water_info(self, water_id):
-        query = text('SELECT name, type, size, inflows FROM waters WHERE id =' + water_id)
+        query = text('SELECT name, type, size, inflow FROM waters WHERE id =' + water_id)
         query_result = self.engine.execute(query)
 
         output = []
         for row in query_result:
             res = dict(row)
             if res['type'] != 0:
-                res['inflows'] = ''
+                res['inflow'] = ''
             else:
-                res['inflows'] = 'Впадает в:' + self.engine.execute('SELECT name FROM waters WHERE id = ' + res['inflows'])
+                res['inflow'] = 'Впадает в:' + list(self.engine.execute('SELECT name FROM waters WHERE id = ' + str(res['inflow'])))[0]
             output.append(res)
 
         return output[0]

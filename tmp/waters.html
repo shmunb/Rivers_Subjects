@@ -9,25 +9,33 @@
     {% for water in waters %}
         <font face="Montserrat">
         <A href = "waters/ {{ water['id'] }}" >
-            {{ water['name'] }} ({{ water['type']}}), {{ water['size'] }}, {% if water['type'] == 0: % {waters[water['inflow']]}}
-        </A><br>
+            {{ water['name'] }} ({{ water['type']}}),</A>    {{ water['size'] }},    {% if water['type'] == 0%}  {{ waters[water['inflow']] }}  {% endif %}
+        <br>
         </font>
     {% endfor %}
 
     <P>
-    <A href = "/museums/add">
-        Add museum
+        Отсортировать по:
+            <A href = "/waters/sorted_by=type"> Тип|</A>
+            <A href = "/waters/sorted_by=size">Размер/Длина|</A>
+            <A href = "/waters/sorted_by=name">Название</A>
+
+    </P>
+
+    <P>
+    <A href = "/waters/add">
+        Добавить водоём
     </A><br>
-    <A href = "/museums/add_exhibit">
-        Add exhibit to museum
+    <A href = "/waters/add_subject">
+        Добавить регион для водоёма
     </A><br>
-    <A href = "/museums/remove">
-        Remove museum
+    <A href = "/waters/remove">
+        Удалить водоём
     </A>
 
     <P>
     <A href = "/">
-        Back to Main page
+        Главная
     </A>
 </body>
 

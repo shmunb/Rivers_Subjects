@@ -4,7 +4,10 @@ from db import DB
 from dbparser import *
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=os.path.abspath('./tmp'))
+
+
+print(app.template_folder)
 app.config['DEBUG'] = True
 DB = DB()
 
