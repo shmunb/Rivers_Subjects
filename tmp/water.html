@@ -1,10 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
+
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <title face="Montserrat">{{ water["name"] }}({{water['type']}})</title>
 </head>
+
+<H2><font face="Montserrat">{{ water["name"] }}({{water['type']}})</font></H2>
+
 <body>
+<H3><font face="Montserrat">Размер:   {{ water['size'] }}    {% if water['type'] == 'река' %}
+                                                                                        {{ 'м' }}
+                                                                                    {% else %}
+                                                                                        {{'м^2'}}
+                                                                                    {% endif %}
+</H3>
+<P>
+{%if water['inflow'] != '' %} {{water["inflow"]}} {% endif %}
+</P>
+
+<P>
+    Протекает через:
+        {% for subject in subjects %}
+            <A href = "subjects/ {{ subject['id'] }}" >
+                <br>
+                {{subject['subject']}}
+            </A>
+            ({{subject['type']}})
+
+        {% endfor %}
+
+</P>
+
 
 </body>
 </html>

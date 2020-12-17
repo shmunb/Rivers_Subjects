@@ -16,14 +16,16 @@ subject_type = {
     "область": 0,
     "край": 1,
     "ГФЗ": 2,
-    "АО": 3
+    "АО": 3,
+    "республика": 4
 }
 
 subject_type_inverted = {
     0: "область",
     1: "край",
     2: "ГФЗ",
-    3: "АО"
+    3: "АО",
+    4: "республика"
 }
 
 
@@ -69,28 +71,42 @@ class DB(object):
         return output
 
     def get_water_info(self, water_id):
-        query = text('SELECT name, type, size, inflow FROM waters WHERE id =' + water_id)
+        query = text('SELECT name, type, size FROM waters WHERE id =' + water_id)
         query_result = self.engine.execute(query)
+
+        inflows = text('SELECT i.name AS into_, i.type AS type FROM waters f JOIN inflows inf JOIN waters i ON i.id = inf.id_into AND '
+                       'f.id = inf.id_from WHERE inf.id_from = ' + str(water_id))
+        inflows_result = self.engine.execute(inflows)
+
+        inflows = []
+        for i in inflows_result:
+            inflows.append(i['into_'] + '(' + water_type_inverted[i['type']] + ')')
+
+        inflows = ', '.join(inflows)
+        print(inflows)
 
         output = []
         for row in query_result:
             res = dict(row)
-            if res['type'] != 0:
-                res['inflow'] = ''
+            res['type'] = water_type_inverted[res['type']]
+            if inflows != '':
+                res['inflow'] = 'Впадает в:' + inflows
             else:
-                res['inflow'] = 'Впадает в:' + list(self.engine.execute('SELECT name FROM waters WHERE id = ' + str(res['inflow'])))[0]
+                res['inflow'] = ''
             output.append(res)
 
         return output[0]
 
     def get_subjects_for_water(self, water_id):
         query = text(
-            'SELECT e.name AS subject, type, size, population FROM subjects e JOIN waters_subjects me JOIN waters m ON e.id = me.id_subject AND m.id = me.id_water WHERE me.id_water =' + water_id)
-        query_result = self.engine.execute(query)
+            'SELECT s.name as subject, s.type as type, s.id as id FROM subjects s JOIN waters_subjects ws JOIN waters '
+            'w ON s.id = ws.id_subject AND w.id = ws.id_water WHERE ws.id_water =' + water_id)
+        query_result = list(self.engine.execute(query))
 
         output = []
         for row in query_result:
             output.append(dict(row))
+            output[len(output) - 1]['type'] = subject_type_inverted[output[len(output) - 1]['type']]
 
         return output
 

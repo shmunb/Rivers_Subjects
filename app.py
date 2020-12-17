@@ -58,7 +58,7 @@ def remove_water():
     return render_template('remove_water.html')
 
 
-@app.route('/waters/add_subject_to_water', methods=['GET', 'POST'])
+@app.route('/waters/add_subject', methods=['GET', 'POST'])
 def add_subject_to_water():
     if request.method == 'POST':
         water_name = request.form.get('water_name')
@@ -125,6 +125,8 @@ def remove_subject_from_water():
 #DB.drop_tables()
 #parse_waters(DB)
 #parse_subjects(DB)
+#parse_relations(DB)
+#parse_inflows(DB)
 
 for row in DB.engine.execute('SELECT * FROM waters;'):
     print(dict(row))

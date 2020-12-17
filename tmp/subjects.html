@@ -8,11 +8,21 @@
 <H2><font face="Montserrat">Субъекты</font></H2>
     {% for subject in subjects %}
         <font face="Montserrat">
-        <A href = "waters/ {{ water['id'] }}" >
-            {{ subject['name'] }} ({{ subject['type']}}),    {{ subject['size'] }} м^2,    {{subject['population']}} чел.
-        </A><br>
+        <A href = "subjects/ {{ subject['id'] }}" >
+            {{ subject['name'] }} ({{ subject['type']}}) </A> , {{ subject['size'] }} м^2, {{subject['population']}} чел.
+        <br>
         </font>
     {% endfor %}
+
+
+        <P>
+        Отсортировать по:
+            <A href = "/subjects/sorted_by=type"> Тип|</A>
+            <A href = "/subjects/sorted_by=size">Размер/Длина|</A>
+            <A href = "/subjects/sorted_by=name">Название|</A>
+            <A href = "/subjects/sorted_by=population">Население</A>
+
+    </P>
 
     <P>
     <A href = "/subjects/add">

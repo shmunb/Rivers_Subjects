@@ -9,7 +9,11 @@
     {% for water in waters %}
         <font face="Montserrat">
         <A href = "waters/ {{ water['id'] }}" >
-            {{ water['name'] }} ({{ water['type']}}),</A>    {{ water['size'] }},    {% if water['type'] == 0%}  {{ waters[water['inflow']] }}  {% endif %}
+            {{ water['name'] }} ({{ water['type']}}),</A>    {{ water['size'] }}    {% if water['type'] == 'река' %}
+                                                                                        {{ 'м' }}
+                                                                                    {% else %}
+                                                                                        {{'м^2'}}
+                                                                                    {% endif %}
         <br>
         </font>
     {% endfor %}
