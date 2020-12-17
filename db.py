@@ -70,9 +70,23 @@ class DB(object):
 
         return output
 
+    def get_subject_info(self, subject_id):
+        query = text('SELECT name, type, size, population FROM subjects WHERE id =' + subject_id)
+        query_result = list(self.engine.execute(query))
+
+        output = []
+
+        for row in query_result:
+            res = dict(row)
+            res['type'] = subject_type_inverted[res['type']]
+            output.append(res)
+
+        return output[0]
+
     def get_water_info(self, water_id):
         query = text('SELECT name, type, size FROM waters WHERE id =' + water_id)
-        query_result = self.engine.execute(query)
+        query_result = list(self.engine.execute(query))
+        print(water_id)
 
         inflows = text('SELECT i.name AS into_, i.type AS type FROM waters f JOIN inflows inf JOIN waters i ON i.id = inf.id_into AND '
                        'f.id = inf.id_from WHERE inf.id_from = ' + str(water_id))
@@ -96,6 +110,19 @@ class DB(object):
             output.append(res)
 
         return output[0]
+
+    def get_water_for_subject(self, subject_id):
+        query = text(
+            'SELECT w.name as name, w.type as type, w.id as id FROM subjects s JOIN waters_subjects ws JOIN waters '
+            'w ON s.id = ws.id_subject AND w.id = ws.id_water WHERE ws.id_subject =' + subject_id)
+        query_result = list(self.engine.execute(query))
+
+        output = []
+        for row in query_result:
+            output.append(dict(row))
+            output[len(output) - 1]['type'] = water_type_inverted[output[len(output) - 1]['type']]
+
+        return output
 
     def get_subjects_for_water(self, water_id):
         query = text(

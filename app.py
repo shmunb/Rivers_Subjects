@@ -81,6 +81,12 @@ def subjects_sorted(sorted_by):
 
    return render_template('subjects.html', subjects=subjects)
 
+@app.route('/subjects/<subject_id>')
+def subject(subject_id):
+    subject_data = DB.get_subject_info(subject_id)
+    water_data = DB.get_water_for_subject(subject_id)
+
+    return render_template('subject.html', waters=water_data, subject=subject_data)
 
 @app.route('/subjects/add', methods=['GET', 'POST'])
 def add_subject():

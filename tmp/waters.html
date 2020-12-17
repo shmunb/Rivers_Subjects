@@ -8,7 +8,7 @@
 <H2><font face="Montserrat">Водоёмы</font></H2>
     {% for water in waters %}
         <font face="Montserrat">
-        <A href = "waters/ {{ water['id'] }}" >
+        <A href = " waters/{{ water['id'] }}" >
             {{ water['name'] }} ({{ water['type']}}),</A>    {{ water['size'] }}    {% if water['type'] == 'река' %}
                                                                                         {{ 'м' }}
                                                                                     {% else %}

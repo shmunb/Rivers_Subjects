@@ -1,0 +1,34 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title face="Montserrat">{{ subject["name"] }}({{subject['type']}})</title>
+</head>
+
+<H2><font face="Montserrat">{{ subject["name"] }}({{subject['type']}})</font></H2>
+
+<body>
+<H3><font face="Montserrat">
+    Размер:{{ subject['size'] }} м^2'<br>
+    Население: {{subject['population']}} чел. <br>
+
+
+</H3>
+
+<P>
+    Водоёмы субъекта:
+        {% for water in waters %}
+            <A href = "../waters/ {{ water['id'] }}" >
+                <br>
+                {{water['name']}}
+            </A>
+            ({{water['type']}})
+
+        {% endfor %}
+
+</P>
+
+    <A href = "/">
+        Главная
+    </A>
+</body>
+</html>

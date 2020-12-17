@@ -21,7 +21,7 @@
 <P>
     Протекает через:
         {% for subject in subjects %}
-            <A href = "subjects/ {{ subject['id'] }}" >
+            <A href = "../subjects/ {{ subject['id'] }}" >
                 <br>
                 {{subject['subject']}}
             </A>
@@ -31,6 +31,8 @@
 
 </P>
 
-
+    <A href = "/">
+        Главная
+    </A>
 </body>
 </html>
