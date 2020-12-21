@@ -34,9 +34,9 @@ class DB(object):
         self.engine = create_engine('sqlite:///data.db', echo=True)
 
     def drop_tables(self):
-        print(self.engine.table_names())
-        query_result = self.engine.execute('DELETE FROM waters')
-        query_result = self.engine.execute('DELETE FROM subjects')
+        print()
+        for name in self.engine.table_names():
+            query_result = self.engine.execute('DROP TABLE ' + name)
 
     def get_waters(self, order=None):
 
@@ -137,9 +137,9 @@ class DB(object):
 
         return output
 
-    def add_water(self, name, _type, size, inflow='NULL'):
+    def add_water(self, name, _type, size):
         query = text('INSERT INTO waters VALUES (NULL, "' + str(name) + '", "' + str(_type) + '", "' + str(
-            size) + str(inflow) + '")')
+            size) + '")')
         query_result = self.engine.execute(query)
 
     def remove_water(self, name):

@@ -42,8 +42,8 @@ def water(water_id):
 def add_water():
     if request.method == 'POST':
         name = request.form.get('name')
-        type = request.form.get(water_type['type'])
-        size = request.form.get('city')
+        type = water_type[request.form.get('type')]
+        size = request.form.get('size')
         DB.add_water(name, type, size)
 
     return render_template('add_water.html')

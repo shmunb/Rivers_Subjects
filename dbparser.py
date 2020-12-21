@@ -18,10 +18,15 @@ def run_base(db):
     db.engine.execute('CREATE TABLE waters_subjects(id_water INTEGER NOT NULL, id_subject INTEGER NOT NULL, '
                       'PRIMARY KEY(id_water, id_subject), FOREIGN KEY (id_water) REFERENCES waters(id), FOREIGN KEY ('
                       'id_subject) REFERENCES subjects(id));')
-
     db.engine.execute('CREATE TABLE inflows(id_from INTEGER NOT NULL, id_into INTEGER NOT NULL, PRIMARY KEY(id_from, '
                       'id_into), FOREIGN KEY (id_from) REFERENCES waters(id), FOREIGN KEY (id_into) REFERENCES'
                       ' waters(id));')
+    db.engine.execute('CREATE TABLE waters_type(id_water INTEGER NOT NULL, type TEXT NOT NULL, '
+                      'PRIMARY KEY(id_water, type), FOREIGN KEY (id_water) REFERENCES waters(type));')
+    db.engine.execute('CREATE TABLE subjects_type(id_subject INTEGER NOT NULL, type TEXT NOT NULL, '
+                      'PRIMARY KEY(id_subject, type), FOREIGN KEY (id_subject) REFERENCES waters(type));')
+
+
 
 
 def parse_waters(db):
