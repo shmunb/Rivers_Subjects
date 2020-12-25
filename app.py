@@ -58,8 +58,8 @@ def remove_water():
     return render_template('remove_water.html')
 
 
-@app.route('/waters/add_subject', methods=['GET', 'POST'])
-def add_subject_to_water():
+@app.route('/waters/<water_id>/add_subject', methods=['GET', 'POST'])
+def add_subject_to_water(water_id):
     if request.method == 'POST':
         water_name = request.form.get('water_name')
         subject_name = request.form.get('subject_name')

@@ -43,14 +43,14 @@ class DB(object):
         query = ''
 
         if order is None:
-            query = text('SELECT * FROM waters')
+            query = text('SELECT w.id, w.name, w.size, t.type FROM waters w JOIN waters_type t ON w.type = t.id_water;')
         else:
-            query = text('SELECT * FROM waters ORDER BY ' + order)
+            query = text('SELECT w.id, w.name, w.size, t.type FROM waters w JOIN waters_type t '
+                         'ON w.type = t.id_water ORDER BY ' + order)
         query_result = self.engine.execute(query)
         output = []
         for row in query_result:
             output.append(dict(row))
-            output[len(output) - 1]['type'] = water_type_inverted[output[len(output) - 1]['type']]
 
         return output
 
@@ -59,26 +59,27 @@ class DB(object):
         query = ''
 
         if order is None:
-            query = text('SELECT * FROM subjects')
+            query = text('SELECT s.id, s.name, s.size, s.population, t.type FROM subjects s JOIN subjects_type t '
+                         'ON s.type = t.id_subject;')
         else:
-            query = text('SELECT * FROM subjects ORDER BY ' + order)
+            query = text('SELECT s.id, s.name, s.size, s.population, t.type FROM subjects s JOIN subjects_type t '
+                         'ON s.type = t.id_subject ORDER BY ' + order + ';')
         query_result = self.engine.execute(query)
         output = []
         for row in query_result:
             output.append(dict(row))
-            output[len(output) - 1]['type'] = subject_type_inverted[output[len(output) - 1]['type']]
 
         return output
 
     def get_subject_info(self, subject_id):
-        query = text('SELECT name, type, size, population FROM subjects WHERE id =' + subject_id)
+        query = text('SELECT s.name, s.size, s.population, t.type FROM subjects s JOIN subjects_type t '
+                     'ON s.type = t.id_subject WHERE id =' + subject_id)
         query_result = list(self.engine.execute(query))
 
         output = []
 
         for row in query_result:
             res = dict(row)
-            res['type'] = subject_type_inverted[res['type']]
             output.append(res)
 
         return output[0]
@@ -113,21 +114,22 @@ class DB(object):
 
     def get_water_for_subject(self, subject_id):
         query = text(
-            'SELECT w.name as name, w.type as type, w.id as id FROM subjects s JOIN waters_subjects ws JOIN waters '
-            'w ON s.id = ws.id_subject AND w.id = ws.id_water WHERE ws.id_subject =' + subject_id)
+            'SELECT w.name as name, t.type as type, w.id as id FROM subjects s JOIN waters_subjects ws JOIN waters '
+            'w JOIN waters_type t ON s.id = ws.id_subject AND w.id = ws.id_water AND w.type = t.id_water '
+            'WHERE ws.id_subject =' + subject_id)
         query_result = list(self.engine.execute(query))
 
         output = []
         for row in query_result:
             output.append(dict(row))
-            output[len(output) - 1]['type'] = water_type_inverted[output[len(output) - 1]['type']]
 
         return output
 
     def get_subjects_for_water(self, water_id):
         query = text(
-            'SELECT s.name as subject, s.type as type, s.id as id FROM subjects s JOIN waters_subjects ws JOIN waters '
-            'w ON s.id = ws.id_subject AND w.id = ws.id_water WHERE ws.id_water =' + water_id)
+            'SELECT s.name as subject, s.type as type, s.id as id FROM subjects s JOIN subjects_type t '
+            'JOIN waters_subjects ws JOIN waters '
+            'w ON s.id = ws.id_subject AND w.id = ws.id_water AND s.type = t.id_subject WHERE ws.id_water =' + water_id)
         query_result = list(self.engine.execute(query))
 
         output = []
