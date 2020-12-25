@@ -73,7 +73,7 @@ class DB(object):
 
     def get_subject_info(self, subject_id):
         query = text('SELECT s.name, s.size, s.population, t.type FROM subjects s JOIN subjects_type t '
-                     'ON s.type = t.id_subject; WHERE id =' + subject_id)
+                     'ON s.type = t.id_subject WHERE id =' + subject_id)
         query_result = list(self.engine.execute(query))
 
         output = []
@@ -127,8 +127,9 @@ class DB(object):
 
     def get_subjects_for_water(self, water_id):
         query = text(
-            'SELECT s.name as subject, s.type as type, s.id as id FROM subjects s JOIN waters_subjects ws JOIN waters '
-            'w ON s.id = ws.id_subject AND w.id = ws.id_water WHERE ws.id_water =' + water_id)
+            'SELECT s.name as subject, s.type as type, s.id as id FROM subjects s JOIN subjects_type t '
+            'JOIN waters_subjects ws JOIN waters '
+            'w ON s.id = ws.id_subject AND w.id = ws.id_water AND s.type = t.id_subject WHERE ws.id_water =' + water_id)
         query_result = list(self.engine.execute(query))
 
         output = []
